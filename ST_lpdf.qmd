@@ -1,0 +1,30 @@
+---
+title: "MARCAR log probability distribution function"
+format: html
+---
+
+We say that $\mathbf{U}=(U_{11},U_{12},\ldots,U_{1S},\ldots,U_{T1},U_{T2},\ldots,U_{TS})$ follows a standard Multivariate AutoRegressive distribution with a spatial CAR structure, denoted by $MARCAR(\rho_{T},\rho_{S})$, if and only if
+\begin{equation}
+\mathbf{U} \sim N(\mathbf{0},\mathbf{Q}_{TS}^{-1}),
+\end{equation}
+where $\mathbf{Q}_{TS}=\mathbf{Q}_{T} \otimes \mathbf{Q}_{S}$ with 
+\begin{eqnarray}
+\mathbf{Q}_{T} &=& \mathbf{I}_{T} + \rho_{T}^{2}\mathbf{I}_{T}^{*}  - \rho_{T}\mathbf{A}_{T}\\
+\mathbf{Q}_{S} &=& \mathbf{D}_{S} - \rho_{S}\mathbf{A}_{S} 
+\end{eqnarray}
+Here $\mathbf{I}_{T}$ denotes the identity matrix, $\mathbf{I}_{T}^{*}$ the diagonal matrix with elements $(0,1,\ldots,1,0)$, $\mathbf{D}_{S}$ the diagonal matrix with elements $(n_{1},n_{2},\ldots,n_{S})$ with $n_{s}$ the number of spatial neighbors of region $s$, whereas $\mathbf{A}_{T}$ and $\mathbf{A}_{S}$ the adjacency matrices of the temporal and spatial CAR structure, respectively.    
+
+Thus,
+\begin{align}
+\log(p(\mathbf{u})) &= \frac{1}{2} \Bigl\{ &-& ST\log(2\pi) + \log(\left| \mathbf{Q}_{TS} \right|) - \mathbf{u}^{t}\mathbf{Q}_{TS}\mathbf{u} \Bigr\}\\
+&= \frac{1}{2} \Bigl\{ &-& ST\log(2\pi) + T\log(\left| \mathbf{Q}_{T} \right|) + S\log(\left| \mathbf{Q}_{S} \right|)  - \mathbf{u}^{t}\mathbf{Q}_{TS}\mathbf{u} \Bigr\}\\
+&= \frac{1}{2} \Bigl\{ &-& ST\log(2\pi)\\
+& &+& T\log(1 - \rho_{T}^{2}) + S\log(\left| \mathbf{D}_{S} \right|) + S\sum_{s=1}^{S}log(1-\rho_{s}\lambda_{s})\\ 
+& &-& \mathbf{u}^{t}\mathbf{Q}_{TS}\mathbf{u} \Bigr\}\\
+&= \frac{1}{2} \Bigl\{ &-& ST\log(2\pi)\\
+& &+& T\log(1 - \rho_{T}^{2}) + S\log(\left| \mathbf{D}_{S} \right|) + S\sum_{s=1}^{S}log(1-\rho_{s}\lambda_{s})\\ 
+& &-& \Bigl[ \mathbf{u}^{t}(\mathbf{I}_{T}\otimes\mathbf{D}_{S})\mathbf{u} - \rho_{S}\mathbf{u}^{t}(\mathbf{I}_{T}\otimes\mathbf{A}_{S})\mathbf{u}\\
+& && - \rho_{T}\mathbf{u}^{t}(\mathbf{A}_{T}\otimes\mathbf{D}_{S})\mathbf{u} + \rho_{T}\rho_{S}\mathbf{u}^{t}(\mathbf{A}_{T}\otimes\mathbf{A}_{S})\mathbf{u}\\
+& && + \rho_{T}^{2}\mathbf{u}^{t}(\mathbf{I}_{T}^{*}\otimes\mathbf{D}_{S})\mathbf{u} - \rho_{T}^{2}\rho_{S}\mathbf{u}^{t}(\mathbf{I}_{T}^{*}\otimes\mathbf{A}_{S})\mathbf{u} \Bigr] \Bigr\}
+\end{align}
+where $\left\{\lambda_{s}\right\}_{s=1}^{S}$ are the eigenvalues of the matrix $\mathbf{C}_{S}=\mathbf{D}_{S}^{-1}\mathbf{A}_{S}$.
