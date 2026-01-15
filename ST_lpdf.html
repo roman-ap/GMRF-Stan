@@ -94,21 +94,29 @@ window.Quarto = {
 
 <p>We say that <span class="math inline">\(\mathbf{U}=(U_{11},U_{12},\ldots,U_{1S},\ldots,U_{T1},U_{T2},\ldots,U_{TS})\)</span> follows a standard Multivariate AutoRegressive distribution with a spatial CAR structure, denoted by <span class="math inline">\(MARCAR(\rho_{T},\rho_{S})\)</span>, if and only if <span class="math display">\[\begin{equation}
 \mathbf{U} \sim N(\mathbf{0},\mathbf{Q}_{TS}^{-1}),
-\end{equation}\]</span> where <span class="math inline">\(\mathbf{Q}_{TS}=\mathbf{Q}_{T} \otimes \mathbf{Q}_{S}\)</span> with <span class="math display">\[\begin{eqnarray}
-\mathbf{Q}_{T} &amp;=&amp; \mathbf{I}_{T} + \rho_{T}^{2}\mathbf{I}_{T}^{*}  - \rho_{T}\mathbf{A}_{T}\\
-\mathbf{Q}_{S} &amp;=&amp; \mathbf{D}_{S} - \rho_{S}\mathbf{A}_{S}
-\end{eqnarray}\]</span> Here <span class="math inline">\(\mathbf{I}_{T}\)</span> denotes the identity matrix, <span class="math inline">\(\mathbf{I}_{T}^{*}\)</span> the diagonal matrix with elements <span class="math inline">\((0,1,\ldots,1,0)\)</span>, <span class="math inline">\(\mathbf{D}_{S}\)</span> the diagonal matrix with elements <span class="math inline">\((n_{1},n_{2},\ldots,n_{S})\)</span> with <span class="math inline">\(n_{s}\)</span> the number of spatial neighbors of region <span class="math inline">\(s\)</span>, whereas <span class="math inline">\(\mathbf{A}_{T}\)</span> and <span class="math inline">\(\mathbf{A}_{S}\)</span> the adjacency matrices of the temporal and spatial CAR structure, respectively.</p>
+\end{equation}\]</span> where <span class="math inline">\(\mathbf{Q}_{TS}=\mathbf{Q}_{T} \otimes \mathbf{Q}_{S}\)</span> with <span class="math display">\[\begin{align}
+\mathbf{Q}_{T} &amp;= \mathbf{I}_{T} + \rho_{T}^{2}\mathbf{I}_{T}^{*}  - \rho_{T}\mathbf{A}_{T}\\
+\mathbf{Q}_{S} &amp;= \mathbf{D}_{S} - \rho_{S}\mathbf{A}_{S}
+\end{align}\]</span> Here <span class="math inline">\(\mathbf{I}_{T}\)</span> denotes the identity matrix, <span class="math inline">\(\mathbf{I}_{T}^{*}\)</span> the diagonal matrix whose entries are <span class="math inline">\((0,1,\ldots,1,0)\)</span>, <span class="math inline">\(\mathbf{D}_{S}\)</span> the diagonal matrix whose entries are <span class="math inline">\((n_{1},n_{2},\ldots,n_{S})\)</span> with <span class="math inline">\(n_{s}\)</span> the number of neighbors of region <span class="math inline">\(s\)</span>, whereas <span class="math inline">\(\mathbf{A}_{T}\)</span> and <span class="math inline">\(\mathbf{A}_{S}\)</span> the adjacency matrices of the temporal AR and spatial CAR structure, respectively.</p>
 <p>Thus, <span class="math display">\[\begin{align}
 \log(p(\mathbf{u})) &amp;= \frac{1}{2} \Bigl\{ &amp;-&amp; ST\log(2\pi) + \log(\left| \mathbf{Q}_{TS} \right|) - \mathbf{u}^{t}\mathbf{Q}_{TS}\mathbf{u} \Bigr\}\\
+&amp;= \frac{1}{2} \Bigl\{ &amp;-&amp; ST\log(2\pi) + \log(\left| \mathbf{Q}_{T} \otimes \mathbf{Q}_{S} \right|) - \mathbf{u}^{t}\mathbf{Q}_{TS}\mathbf{u} \Bigr\}\\
+&amp;= \frac{1}{2} \Bigl\{ &amp;-&amp; ST\log(2\pi) + \log(\left| \mathbf{Q}_{T} \right|^{T} \left| \mathbf{Q}_{S} \right|^{S}) - \mathbf{u}^{t}\mathbf{Q}_{TS}\mathbf{u} \Bigr\}\\
 &amp;= \frac{1}{2} \Bigl\{ &amp;-&amp; ST\log(2\pi) + T\log(\left| \mathbf{Q}_{T} \right|) + S\log(\left| \mathbf{Q}_{S} \right|)  - \mathbf{u}^{t}\mathbf{Q}_{TS}\mathbf{u} \Bigr\}\\
 &amp;= \frac{1}{2} \Bigl\{ &amp;-&amp; ST\log(2\pi)\\
-&amp; &amp;+&amp; T\log(1 - \rho_{T}^{2}) + S\log(\left| \mathbf{D}_{S} \right|) + S\sum_{s=1}^{S}log(1-\rho_{s}\lambda_{s})\\
+&amp; &amp;+&amp; T\log(1 - \rho_{T}^{2}) + S\bigl[ \log(\left| \mathbf{D}_{S} \right|) + \sum_{s=1}^{S}\log(1-\rho_{s}\lambda_{s})\bigr]\\
 &amp; &amp;-&amp; \mathbf{u}^{t}\mathbf{Q}_{TS}\mathbf{u} \Bigr\}\\
 &amp;= \frac{1}{2} \Bigl\{ &amp;-&amp; ST\log(2\pi)\\
-&amp; &amp;+&amp; T\log(1 - \rho_{T}^{2}) + S\log(\left| \mathbf{D}_{S} \right|) + S\sum_{s=1}^{S}log(1-\rho_{s}\lambda_{s})\\
+&amp; &amp;+&amp; T\log(1 - \rho_{T}^{2}) + S\bigl[ \log(\left| \mathbf{D}_{S} \right|) + \sum_{s=1}^{S}\log(1-\rho_{s}\lambda_{s})\bigr]\\
+&amp; &amp;-&amp; \mathbf{u}^{t}\bigl[ \mathbf{Q}_{T} \otimes \mathbf{Q}_{S} \bigr]\mathbf{u} \Bigr\}\\
+&amp;= \frac{1}{2} \Bigl\{ &amp;-&amp; ST\log(2\pi)\\
+&amp; &amp;+&amp; T\log(1 - \rho_{T}^{2}) + S\bigl[ \log(\left| \mathbf{D}_{S} \right|) + \sum_{s=1}^{S}\log(1-\rho_{s}\lambda_{s})\bigr]\\
+&amp; &amp;-&amp; \mathbf{u}^{t}\bigl[ (\mathbf{I}_{T} + \rho_{T}^{2}\mathbf{I}_{T}^{*}  - \rho_{T}\mathbf{A}_{T}) \otimes (\mathbf{D}_{S} - \rho_{S}\mathbf{A}_{S} ) \bigr]\mathbf{u} \Bigr\}\\
+&amp;= \frac{1}{2} \Bigl\{ &amp;-&amp; ST\log(2\pi)\\
+&amp; &amp;+&amp; T\log(1 - \rho_{T}^{2}) + S\log(\left| \mathbf{D}_{S} \right|) + S\sum_{s=1}^{S}\log(1-\rho_{s}\lambda_{s})\\
 &amp; &amp;-&amp; \Bigl[ \mathbf{u}^{t}(\mathbf{I}_{T}\otimes\mathbf{D}_{S})\mathbf{u} - \rho_{S}\mathbf{u}^{t}(\mathbf{I}_{T}\otimes\mathbf{A}_{S})\mathbf{u}\\
-&amp; &amp;&amp; - \rho_{T}\mathbf{u}^{t}(\mathbf{A}_{T}\otimes\mathbf{D}_{S})\mathbf{u} + \rho_{T}\rho_{S}\mathbf{u}^{t}(\mathbf{A}_{T}\otimes\mathbf{A}_{S})\mathbf{u}\\
-&amp; &amp;&amp; + \rho_{T}^{2}\mathbf{u}^{t}(\mathbf{I}_{T}^{*}\otimes\mathbf{D}_{S})\mathbf{u} - \rho_{T}^{2}\rho_{S}\mathbf{u}^{t}(\mathbf{I}_{T}^{*}\otimes\mathbf{A}_{S})\mathbf{u} \Bigr] \Bigr\}
+&amp; &amp;&amp; + \rho_{T}^{2}\mathbf{u}^{t}(\mathbf{I}_{T}^{*}\otimes\mathbf{D}_{S})\mathbf{u} - \rho_{T}^{2}\rho_{S}\mathbf{u}^{t}(\mathbf{I}_{T}^{*}\otimes\mathbf{A}_{S})\mathbf{u}\\
+&amp; &amp;&amp; - \rho_{T}\mathbf{u}^{t}(\mathbf{A}_{T}\otimes\mathbf{D}_{S})\mathbf{u} + \rho_{T}\rho_{S}\mathbf{u}^{t}(\mathbf{A}_{T}\otimes\mathbf{A}_{S})\mathbf{u}\Bigr] \Bigr\}
 \end{align}\]</span> where <span class="math inline">\(\left\{\lambda_{s}\right\}_{s=1}^{S}\)</span> are the eigenvalues of the matrix <span class="math inline">\(\mathbf{C}_{S}=\mathbf{D}_{S}^{-1}\mathbf{A}_{S}\)</span>.</p>
 
 </main>
