@@ -6,7 +6,6 @@ data {
   int<lower=1> T;
   int<lower=1> S;
   array[T*S] int<lower=0> y;
-  //vector[T*S] log_offset;
   vector[S] lambdas;
   real pm_mu;
   real<lower=0> psd_mu;
@@ -47,17 +46,17 @@ parameters {
   real<lower=0> sigma;
   real<lower=-1, upper=1> rho_time;
   real<lower=1/min(lambdas), upper=1/max(lambdas)> rho_space;
-  vector[T*S] phi;
+  vector[T*S] u;
 }
 
 transformed parameters {
-    vector[T*S] eta;
-    eta = mu + sigma*phi;
+  vector[T*S] eta;
+  eta = mu + sigma*u;
 }
 
 model {
   target += poisson_log_lpmf(y | eta);
-  target += std_marcar_lpdf(phi | zeros,
+  target += std_marcar_lpdf(u | zeros,
                                   rho_time, rho_space,
                                   log_det_Ds, lambdas,
                                   ItDs_ii,
@@ -67,10 +66,8 @@ model {
                                   IItDs_ii, 
                                   IItAs_w, IItAs_v, IItAs_u,
                                   T, S);
-  //target += normal_lpdf(rho_time | pm_rho_time, psd_rho_time);
-  target += uniform_lpdf(rho_time | -1, 1);
-  //target += normal_lpdf(rho_space | pm_rho_space, psd_rho_space);
-  target += uniform_lpdf(rho_space | 1/min(lambdas), 1/max(lambdas));
-  target += normal_lpdf(sigma | pm_sigma, psd_sigma);
   target += normal_lpdf(mu | pm_mu, psd_mu);
+  target += normal_lpdf(sigma | pm_sigma, psd_sigma);
+  target += normal_lpdf(rho_time | pm_rho_time, psd_rho_time);
+  target += normal_lpdf(rho_space | pm_rho_space, psd_rho_space);
 }
